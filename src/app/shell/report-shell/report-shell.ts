@@ -66,12 +66,17 @@ export class ReportShellComponent implements OnInit {
 
     goTo(i: number): void {
         if (!this.canNavigateTo(i)) return;
+
+        this.state.clearSavingStatus();
+
         const step = this.steps[i];
         if (!step) return;
         void this.router.navigateByUrl(step.route);
     }
 
     goBack(): void {
+        this.state.clearSavingStatus();
+
         const i = this.currentIndex();
         if (i <= 0) return;
         this.goTo(i - 1);
@@ -79,6 +84,9 @@ export class ReportShellComponent implements OnInit {
 
     goNext(): void {
         if (!this.canGoNext()) return;
+
+        this.state.clearSavingStatus();
+
         const i = this.currentIndex();
         if (i >= this.steps.length - 1) return;
         this.goTo(i + 1);

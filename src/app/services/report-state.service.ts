@@ -30,7 +30,6 @@ export class ReportStateService {
         const dismissed = sessionStorage.getItem(NOTICE_KEY) === '1';
         this.hasAcknowledgedDraft = dismissed || !existing;
 
-
         this.form = this.forms.buildForm(existing ?? undefined);
 
         this.form.valueChanges
@@ -40,6 +39,11 @@ export class ReportStateService {
                 this.drafts.save(this.forms.toDraft(this.form));
                 this.hasDraft = true;
                 this.savingText = 'All changes saved';
+                setTimeout(() => {
+                    if (this.savingText === 'All changes saved') {
+                        this.clearSavingStatus();
+                    }
+                }, 2000);
             });
     }
 
@@ -67,4 +71,9 @@ export class ReportStateService {
         this.hasAcknowledgedDraft = true;
         sessionStorage.setItem(NOTICE_KEY, '1');
     }
+
+    clearSavingStatus(): void {
+        this.savingText = '';
+    }
+
 }
