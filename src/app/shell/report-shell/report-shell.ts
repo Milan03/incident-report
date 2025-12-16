@@ -60,8 +60,8 @@ export class ReportShellComponent implements OnInit {
         void this.router.navigateByUrl('/incident');
     }
 
-    clearDraft(): void {
-        this.state.clearDraft();
+    dismissDraftNotice(): void {
+        this.state.dismissDraftNotice();
     }
 
     goTo(i: number): void {

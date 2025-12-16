@@ -1,14 +1,14 @@
 <div class="page">
-    @if (state.hasDraft) {
-    <div class="banner card">
+    @if (state.hasDraft && !state.hasAcknowledgedDraft) {
+    <div class="banner">
         <div class="banner-left">
-            Draft found. You can resume or start fresh.
-            <span class="save">{{ state.savingText }}</span>
+            <div class="banner-title">Unfinished draft detected</div>
+            <div class="banner-sub">You can continue where you left off, or start a new report.</div>
         </div>
+
         <div class="banner-actions">
-            <button type="button" class="btn" (click)="resumeDraft()">Resume</button>
+            <button type="button" class="btn primary" (click)="dismissDraftNotice()">Continue</button>
             <button type="button" class="btn" (click)="startNew()">Start new</button>
-            <button type="button" class="btn" (click)="clearDraft()">Clear</button>
         </div>
     </div>
     }
@@ -27,9 +27,13 @@
     </main>
 
     <footer class="footer">
-        <button type="button" class="btn" (click)="goBack()">Back</button>
-        <button type="button" class="btn primary" (click)="goNext()" [disabled]="!canGoNext()">
-            Next
-        </button>
+        <span class="save-status">{{ state.savingText }}</span>
+
+        <div>
+            <button type="button" class="btn" (click)="goBack()">Back</button>
+            <button type="button" class="btn primary" (click)="goNext()" [disabled]="!canGoNext()">
+                Next
+            </button>
+        </div>
     </footer>
 </div>

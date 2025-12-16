@@ -67,7 +67,30 @@ border: 1px solid rgba(15, 23, 42, 0.18);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
+
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.22);  /* cool blue border */
+  background: rgba(59, 130, 246, 0.06);       /* cool blue tint */
+}
+
+.banner-title {
+  font-weight: 800;
+  font-size: 14px;
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.banner-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.btn.ghost {
+  background: transparent;
+  border-color: rgba(15, 23, 42, 0.18);
+  opacity: 0.85;
 }
 
 .banner-left {
@@ -83,9 +106,15 @@ border: 1px solid rgba(15, 23, 42, 0.18);
 .banner-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .step:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.save-status {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.65);
 }

@@ -6,13 +6,16 @@ import { DraftStoreService } from './draft-store.service';
 import { ReportFormService } from './report-form.service';
 import { IncidentReportDraftV1 } from '../models/report.model';
 
+const NOTICE_KEY = 'incident_report_notice_dismissed_v1';
+
 @Injectable({ providedIn: 'root' })
 export class ReportStateService {
     private readonly destroy$ = new Subject<void>();
 
     form!: FormGroup;
     hasDraft = false;
-    savingText = 'Saved';
+    hasAcknowledgedDraft = false;
+    savingText = '';
 
     constructor(
         private drafts: DraftStoreService,
@@ -20,43 +23,48 @@ export class ReportStateService {
     ) { }
 
     init(): void {
-        if (this.form) return; // already initialized
+        if (this.form) return;
 
         const existing = this.drafts.load();
         this.hasDraft = !!existing;
+        const dismissed = sessionStorage.getItem(NOTICE_KEY) === '1';
+        this.hasAcknowledgedDraft = dismissed || !existing;
+
+
         this.form = this.forms.buildForm(existing ?? undefined);
 
-        // autosave
         this.form.valueChanges
             .pipe(debounceTime(800))
             .subscribe(() => {
                 this.savingText = 'Saving...';
-                const draft = this.forms.toDraft(this.form);
-                this.drafts.save(draft);
+                this.drafts.save(this.forms.toDraft(this.form));
                 this.hasDraft = true;
-                this.savingText = 'Saved';
+                this.savingText = 'All changes saved';
             });
     }
 
     resumeDraft(): void {
         const d = this.drafts.load();
         if (!d) return;
-        // keep same FormGroup instance: patch values instead of replacing
+
         this.form.reset(this.forms.buildForm(d).getRawValue());
         this.hasDraft = true;
+        this.hasAcknowledgedDraft = true;
     }
 
     startNew(): void {
         this.drafts.clear();
-        const empty: IncidentReportDraftV1 = this.forms.createEmptyDraft();
+        const empty = this.forms.createEmptyDraft();
         this.form.reset(this.forms.buildForm(empty).getRawValue());
         this.hasDraft = false;
-        this.savingText = 'Saved';
+        this.hasAcknowledgedDraft = true;
+        sessionStorage.setItem(NOTICE_KEY, '1');
+
+        this.savingText = '';
     }
 
-    clearDraft(): void {
-        this.drafts.clear();
-        this.hasDraft = false;
-        this.savingText = 'Saved';
+    dismissDraftNotice(): void {
+        this.hasAcknowledgedDraft = true;
+        sessionStorage.setItem(NOTICE_KEY, '1');
     }
 }
