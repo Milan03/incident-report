@@ -1,0 +1,43 @@
+<h2>People Involved</h2>
+
+<div class="hint">Add at least one person involved in or affected by the incident.</div>
+
+<div class="rows">
+  @for (ctrl of peopleArray().controls; track $index) {
+    <div class="card" [formGroup]="personGroupAt($index)">
+      <div class="row">
+        <label>
+          Name *
+          <input type="text" formControlName="name" placeholder="Full name" />
+        </label>
+
+        <label>
+          Role / Relationship *
+          <input type="text" formControlName="role" placeholder="e.g., Employee, Visitor" />
+        </label>
+      </div>
+
+      <div class="row small">
+        <label class="check">
+          <input type="checkbox" formControlName="injuryInvolved" />
+          Injury involved
+        </label>
+
+        <button type="button" class="btn danger" (click)="remove($index)" [disabled]="peopleArray().length <= 1">
+          Remove
+        </button>
+      </div>
+
+      <label>
+        Notes (optional)
+        <textarea rows="3" formControlName="notes" placeholder="Optional details..."></textarea>
+      </label>
+
+      @if (personGroupAt($index).invalid && (personGroupAt($index).dirty || personGroupAt($index).touched)) {
+        <div class="error">Name and Role are required for each person.</div>
+      }
+    </div>
+  }
+</div>
+
+<button type="button" class="btn" (click)="add()">+ Add another person</button>

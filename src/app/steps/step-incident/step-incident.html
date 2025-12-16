@@ -1,0 +1,46 @@
+<h2>Incident Details</h2>
+
+<div class="hint">Enter the basic facts about what happened. Fields marked * are required.</div>
+
+<form [formGroup]="g" class="form">
+  <div class="card">
+    <div class="row">
+      <label>
+        Date *
+        <input type="date" formControlName="date" />
+      </label>
+
+      <label>
+        Time *
+        <input type="time" formControlName="time" />
+      </label>
+    </div>
+
+    <label>
+      Location *
+      <input type="text" formControlName="location" placeholder="e.g., Warehouse aisle 3" />
+    </label>
+
+    <label>
+      Incident type *
+      <select formControlName="type">
+        @for (t of incidentTypes; track t.value) {
+          <option [value]="t.value">{{ t.label }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Description *
+      <textarea
+        formControlName="description"
+        rows="5"
+        placeholder="Briefly describe what happened."
+      ></textarea>
+    </label>
+
+    @if (g.invalid && (g.dirty || g.touched)) {
+      <div class="error">Please complete all required fields in this step.</div>
+    }
+  </div>
+</form>

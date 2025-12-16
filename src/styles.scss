@@ -1,1 +1,72 @@
+/* ---- Color tokens ---- */
+:root {
+  --bg-app: #f4f7fb;
+  --bg-card: #ffffff;
+  --border-soft: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.18);
+  --text-muted: rgba(15, 23, 42, 0.65);
+  --accent: #3b82f6; // muted blue
+  --error: #dc2626;
+}
+
+/* ---- Card ---- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+/* ---- Form layout ---- */
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ---- Inputs ---- */
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ---- Muted helper text ---- */
+.hint {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ---- Error ---- */
+.error {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.04);
+  color: var(--error);
+}
 /* You can add global styles to this file, and also import other style files */

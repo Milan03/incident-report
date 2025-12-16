@@ -1,0 +1,35 @@
+<div class="page">
+    @if (state.hasDraft) {
+    <div class="banner card">
+        <div class="banner-left">
+            Draft found. You can resume or start fresh.
+            <span class="save">{{ state.savingText }}</span>
+        </div>
+        <div class="banner-actions">
+            <button type="button" class="btn" (click)="resumeDraft()">Resume</button>
+            <button type="button" class="btn" (click)="startNew()">Start new</button>
+            <button type="button" class="btn" (click)="clearDraft()">Clear</button>
+        </div>
+    </div>
+    }
+
+    <nav class="steps">
+        @for (s of steps; track s.key) {
+        <button type="button" class="step" [class.active]="steps.indexOf(s) === currentIndex()"
+            [disabled]="!canNavigateTo(steps.indexOf(s))" (click)="goTo(steps.indexOf(s))">
+            {{ s.label }}
+        </button>
+        }
+    </nav>
+
+    <main class="content">
+        <router-outlet></router-outlet>
+    </main>
+
+    <footer class="footer">
+        <button type="button" class="btn" (click)="goBack()">Back</button>
+        <button type="button" class="btn primary" (click)="goNext()" [disabled]="!canGoNext()">
+            Next
+        </button>
+    </footer>
+</div>
