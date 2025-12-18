@@ -1,0 +1,134 @@
+.hint {
+    opacity: 0.75;
+    margin-bottom: 12px;
+}
+
+.grid {
+    display: grid;
+    gap: 12px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 14px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.section-title {
+    font-weight: 800;
+    font-size: 14px;
+    color: rgba(15, 23, 42, 0.92);
+}
+
+.kv {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px 12px;
+}
+
+.k {
+    font-weight: 700;
+    color: rgba(15, 23, 42, 0.65);
+    font-size: 13px;
+}
+
+.v {
+    color: rgba(15, 23, 42, 0.92);
+    font-size: 14px;
+}
+
+.block {
+    display: grid;
+    gap: 6px;
+}
+
+.pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.list {
+    display: grid;
+    gap: 10px;
+}
+
+.list-item {
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    border-radius: 12px;
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.list-main {
+    display: grid;
+    gap: 2px;
+}
+
+.strong {
+    font-weight: 800;
+}
+
+.muted {
+    color: rgba(15, 23, 42, 0.65);
+    font-size: 13px;
+}
+
+.muted.small {
+    font-size: 12px;
+}
+
+.notes {
+    display: grid;
+    gap: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.pill {
+    justify-self: start;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.15);
+    background: rgba(15, 23, 42, 0.03);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pill.danger {
+    border-color: rgba(220, 38, 38, 0.25);
+    background: rgba(220, 38, 38, 0.06);
+    color: rgba(220, 38, 38, 1);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.18);
+    background: #ffffff;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+    .kv {
+        grid-template-columns: 1fr;
+    }
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}

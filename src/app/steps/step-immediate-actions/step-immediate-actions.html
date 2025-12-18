@@ -1,1 +1,31 @@
-<p>step-immediate-actions works!</p>
+<h2>Immediate Actions</h2>
+
+<div class="hint">
+    Describe what was done right away to address the situation (first aid,
+    shutdown equipment, notify supervisor, etc.).
+</div>
+
+<form class="form" [formGroup]="g">
+    <div class="card">
+        <label>
+            Actions taken immediately *
+            <textarea
+                rows="6"
+                formControlName="taken"
+                placeholder="Example: Area was cordoned off, supervisor notified, first aid provided, incident logged..."
+            ></textarea>
+        </label>
+
+        <div class="meta">
+            <span class="count">
+                {{ (g.get('taken')?.value?.length ?? 0) }} / 2000
+            </span>
+        </div>
+
+        @if (g.invalid && (g.dirty || g.touched)) {
+        <div class="error">
+            Please enter the immediate actions taken (required).
+        </div>
+        }
+    </div>
+</form>

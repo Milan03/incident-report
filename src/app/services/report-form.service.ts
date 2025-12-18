@@ -8,6 +8,7 @@ import {
     ReactiveFormsModule,
 } from '@angular/forms';
 import { IncidentReportDraftV1, IncidentType } from '../models/report.model';
+import { notBeforeToday } from '../validators/date.validators';
 
 function guid(): string {
     // good enough for MVP (no backend)
@@ -16,7 +17,7 @@ function guid(): string {
 
 @Injectable({ providedIn: 'root' })
 export class ReportFormService {
-    constructor(private fb: FormBuilder) { }
+    constructor(private fb: FormBuilder) {}
 
     createEmptyDraft(): IncidentReportDraftV1 {
         const now = new Date().toISOString();
@@ -31,13 +32,9 @@ export class ReportFormService {
                 type: 'Other',
                 description: '',
             },
-            people: [
-                { name: '', role: '', injuryInvolved: false, notes: '' },
-            ],
+            people: [{ name: '', role: '', injuryInvolved: false, notes: '' }],
             immediateActions: { taken: '' },
-            followUpActions: [
-                { description: '', owner: '', targetDate: '' },
-            ],
+            followUpActions: [{ description: '', owner: '', targetDate: '' }],
             preparedBy: { name: '', datePreparedUtc: now },
         };
     }
@@ -48,21 +45,38 @@ export class ReportFormService {
         return this.fb.group({
             schemaVersion: new FormControl(1, { nonNullable: true }),
             draftId: new FormControl(d.draftId, { nonNullable: true }),
-            updatedAtUtc: new FormControl(d.updatedAtUtc, { nonNullable: true }),
+            updatedAtUtc: new FormControl(d.updatedAtUtc, {
+                nonNullable: true,
+            }),
 
             incident: this.fb.group({
                 date: [d.incident.date, Validators.required],
                 time: [d.incident.time, Validators.required],
-                location: [d.incident.location, [Validators.required, Validators.maxLength(200)]],
+                location: [
+                    d.incident.location,
+                    [Validators.required, Validators.maxLength(200)],
+                ],
                 type: [d.incident.type as IncidentType, Validators.required],
-                description: [d.incident.description, [Validators.required, Validators.maxLength(2000)]],
+                description: [
+                    d.incident.description,
+                    [Validators.required, Validators.maxLength(2000)],
+                ],
             }),
 
             people: this.fb.array(
-                (d.people?.length ? d.people : [{ name: '', role: '', injuryInvolved: false }]).map(p =>
+                (d.people?.length
+                    ? d.people
+                    : [{ name: '', role: '', injuryInvolved: false }]
+                ).map((p) =>
                     this.fb.group({
-                        name: [p.name, [Validators.required, Validators.maxLength(120)]],
-                        role: [p.role, [Validators.required, Validators.maxLength(120)]],
+                        name: [
+                            p.name,
+                            [Validators.required, Validators.maxLength(120)],
+                        ],
+                        role: [
+                            p.role,
+                            [Validators.required, Validators.maxLength(120)],
+                        ],
                         injuryInvolved: [!!p.injuryInvolved],
                         notes: [p.notes ?? '', Validators.maxLength(500)],
                     })
@@ -70,21 +84,39 @@ export class ReportFormService {
             ),
 
             immediateActions: this.fb.group({
-                taken: [d.immediateActions.taken, [Validators.required, Validators.maxLength(2000)]],
+                taken: [
+                    d.immediateActions.taken,
+                    [Validators.required, Validators.maxLength(2000)],
+                ],
             }),
 
             followUpActions: this.fb.array(
-                (d.followUpActions?.length ? d.followUpActions : [{ description: '', owner: '', targetDate: '' }]).map(a =>
+                (d.followUpActions?.length
+                    ? d.followUpActions
+                    : [{ description: '', owner: '', targetDate: '' }]
+                ).map((a) =>
                     this.fb.group({
-                        description: [a.description, [Validators.required, Validators.maxLength(200)]],
-                        owner: [a.owner, [Validators.required, Validators.maxLength(120)]],
-                        targetDate: [a.targetDate, Validators.required],
+                        description: [
+                            a.description,
+                            [Validators.required, Validators.maxLength(200)],
+                        ],
+                        owner: [
+                            a.owner,
+                            [Validators.required, Validators.maxLength(120)],
+                        ],
+                        targetDate: [
+                            a.targetDate,
+                            [Validators.required, notBeforeToday()],
+                        ],
                     })
                 )
             ),
 
             preparedBy: this.fb.group({
-                name: [d.preparedBy.name, [Validators.required, Validators.maxLength(120)]],
+                name: [
+                    d.preparedBy.name,
+                    [Validators.required, Validators.maxLength(120)],
+                ],
                 datePreparedUtc: [d.preparedBy.datePreparedUtc],
             }),
         });
@@ -98,7 +130,9 @@ export class ReportFormService {
             updatedAtUtc: new Date().toISOString(),
             preparedBy: {
                 ...value.preparedBy,
-                datePreparedUtc: value.preparedBy?.datePreparedUtc || new Date().toISOString(),
+                datePreparedUtc:
+                    value.preparedBy?.datePreparedUtc ||
+                    new Date().toISOString(),
             },
         };
     }
@@ -132,9 +166,12 @@ export class ReportFormService {
     addFollowUp(form: FormGroup): void {
         this.followUpArray(form).push(
             this.fb.group({
-                description: ['', [Validators.required, Validators.maxLength(200)]],
+                description: [
+                    '',
+                    [Validators.required, Validators.maxLength(200)],
+                ],
                 owner: ['', [Validators.required, Validators.maxLength(120)]],
-                targetDate: ['', Validators.required],
+                targetDate: ['', [Validators.required, notBeforeToday()]],
             })
         );
     }

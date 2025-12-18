@@ -1,0 +1,57 @@
+.hint {
+    opacity: 0.75;
+    margin-bottom: 12px;
+}
+
+.form {
+    display: grid;
+    gap: 12px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 14px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+}
+
+textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.18);
+    background: #fff;
+    font: inherit;
+    resize: vertical;
+    min-height: 120px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.95);
+}
+
+.meta {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.count {
+    font-size: 13px;
+    color: rgba(15, 23, 42, 0.65);
+}
+
+.error {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    background: rgba(220, 38, 38, 0.04);
+    color: rgba(220, 38, 38, 1);
+}

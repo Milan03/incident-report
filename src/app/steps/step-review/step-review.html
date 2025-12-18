@@ -1,1 +1,125 @@
-<p>step-review works!</p>
+<h2>Review</h2>
+
+<div class="hint">
+    Review the report details below. Use Back to make changes.
+</div>
+
+<div class="grid">
+    <section class="card">
+        <div class="section-title">Incident</div>
+
+        <div class="kv">
+            <div class="k">Date</div>
+            <div class="v">{{ asText(incident().get('date')?.value) }}</div>
+
+            <div class="k">Time</div>
+            <div class="v">{{ asText(incident().get('time')?.value) }}</div>
+
+            <div class="k">Location</div>
+            <div class="v">{{ asText(incident().get('location')?.value) }}</div>
+
+            <div class="k">Type</div>
+            <div class="v">
+                {{ getIncidentTypeLabel(incident().get('type')?.value) }}
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="k">Description</div>
+            <div class="v pre">
+                {{ asText(incident().get('description')?.value) }}
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="section-title">People involved</div>
+
+        @if (people().length === 0) {
+        <div class="muted">—</div>
+        } @else {
+        <div class="list">
+            @for (p of people().controls; track $index) {
+            <div class="list-item">
+                <div class="list-main">
+                    <div class="strong">{{ asText(p.get('name')?.value) }}</div>
+                    <div class="muted">{{ asText(p.get('role')?.value) }}</div>
+                </div>
+
+                <div
+                    class="pill"
+                    [class.danger]="p.get('injuryInvolved')?.value === true"
+                >
+                    @if (p.get('injuryInvolved')?.value === true) { Injury }
+                    @else { No injury }
+                </div>
+
+                @if (asText(p.get('notes')?.value) !== '—') {
+                <div class="notes">
+                    <div class="k">Notes</div>
+                    <div class="v pre">{{ asText(p.get('notes')?.value) }}</div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+        }
+    </section>
+
+    <section class="card">
+        <div class="section-title">Immediate actions</div>
+
+        <div class="block">
+            <div class="k">Actions taken immediately</div>
+            <div class="v pre">
+                {{ asText(immediate().get('taken')?.value) }}
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="section-title">Follow-up actions</div>
+
+        @if (followUp().length === 0) {
+        <div class="muted">—</div>
+        } @else {
+        <div class="list">
+            @for (a of followUp().controls; track $index) {
+            <div class="list-item">
+                <div class="list-main">
+                    <div class="strong">
+                        {{ asText(a.get('description')?.value) }}
+                    </div>
+                    <div class="muted">
+                        Owner: {{ asText(a.get('owner')?.value) }} · Target: {{
+                        asText(a.get('targetDate')?.value) }}
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </section>
+
+    <section class="card">
+        <div class="section-title">Prepared by</div>
+
+        <div class="kv">
+            <div class="k">Name</div>
+            <div class="v">{{ asText(preparedBy().get('name')?.value) }}</div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn" disabled>
+                Export PDF (coming soon)
+            </button>
+            <button type="button" class="btn" disabled>
+                Email (coming soon)
+            </button>
+        </div>
+
+        <div class="muted small">
+            Export and emailing will be added after the form flow is finalized.
+        </div>
+    </section>
+</div>

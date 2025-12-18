@@ -1,1 +1,60 @@
-<p>step-follow-up-actions works!</p>
+<h2>Follow-up Actions</h2>
+
+<div class="hint">
+    Add any actions required after the incident (repairs, training, policy
+    review, follow-up calls, etc.).
+</div>
+
+<div class="rows">
+    @for (ctrl of followUpArray().controls; track $index) {
+    <div class="card" [formGroup]="actionGroupAt($index)">
+        <div class="row">
+            <label>
+                Action description *
+                <input
+                    type="text"
+                    formControlName="description"
+                    placeholder="e.g., Replace damaged guard rail"
+                />
+            </label>
+
+            <label>
+                Owner *
+                <input
+                    type="text"
+                    formControlName="owner"
+                    placeholder="e.g., Facilities Manager"
+                />
+            </label>
+        </div>
+
+        <div class="row small">
+            <label>
+                Target date *
+                <input type="date" formControlName="targetDate" />
+            </label>
+
+            <button
+                type="button"
+                class="btn danger"
+                (click)="remove($index)"
+                [disabled]="followUpArray().length <= 1"
+            >
+                Remove
+            </button>
+            @if
+            (actionGroupAt($index).get('targetDate')?.hasError('notBeforeToday')
+            && (actionGroupAt($index).dirty || actionGroupAt($index).touched)) {
+            <div class="error">Target date cannot be in the past.</div>
+            }
+        </div>
+    </div>
+    @if (actionGroupAt($index).invalid && (actionGroupAt($index).dirty ||
+    actionGroupAt($index).touched)) {
+    <div class="error">All fields are required for each follow-up action.</div>
+    } }
+</div>
+
+<button type="button" class="btn" (click)="add()">
+    + Add another follow-up action
+</button>
