@@ -35,7 +35,11 @@ export class ReportFormService {
             people: [{ name: '', role: '', injuryInvolved: false, notes: '' }],
             immediateActions: { taken: '' },
             followUpActions: [{ description: '', owner: '', targetDate: '' }],
-            preparedBy: { name: '', datePreparedUtc: now },
+            preparedBy: {
+                name: '',
+                email: '',
+                preparedAt: '',
+            },
         };
     }
 
@@ -114,10 +118,17 @@ export class ReportFormService {
 
             preparedBy: this.fb.group({
                 name: [
-                    d.preparedBy.name,
+                    d?.preparedBy?.name ?? '',
                     [Validators.required, Validators.maxLength(120)],
                 ],
-                datePreparedUtc: [d.preparedBy.datePreparedUtc],
+                email: [
+                    d?.preparedBy?.email ?? '',
+                    [Validators.email, Validators.maxLength(254)],
+                ],
+                preparedAt: [
+                    d?.preparedBy?.preparedAt ?? this.todayDateString(),
+                    Validators.required,
+                ],
             }),
         });
     }
@@ -129,10 +140,9 @@ export class ReportFormService {
             schemaVersion: 1,
             updatedAtUtc: new Date().toISOString(),
             preparedBy: {
-                ...value.preparedBy,
-                datePreparedUtc:
-                    value.preparedBy?.datePreparedUtc ||
-                    new Date().toISOString(),
+                name: form.get('preparedBy.name')?.value ?? '',
+                email: form.get('preparedBy.email')?.value ?? '',
+                preparedAt: form.get('preparedBy.preparedAt')?.value ?? '',
             },
         };
     }
@@ -180,5 +190,13 @@ export class ReportFormService {
         const arr = this.followUpArray(form);
         if (arr.length <= 1) return;
         arr.removeAt(index);
+    }
+
+    private todayDateString(): string {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
     }
 }

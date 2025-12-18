@@ -1,6 +1,11 @@
 import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
+import {
+    Router,
+    RouterLink,
+    RouterOutlet,
+    NavigationEnd,
+} from '@angular/router';
 import { ReactiveFormsModule, FormArray, FormGroup } from '@angular/forms';
 
 import { ReportStateService } from '../../services/report-state.service';
@@ -25,14 +30,23 @@ export class ReportShellComponent implements OnInit {
     readonly steps: Step[] = [
         { key: 'incident', label: 'Incident', route: '/incident' },
         { key: 'people', label: 'People', route: '/people' },
-        { key: 'immediate-actions', label: 'Immediate Actions', route: '/immediate-actions' },
-        { key: 'follow-up-actions', label: 'Follow-up Actions', route: '/follow-up-actions' },
+        {
+            key: 'immediate-actions',
+            label: 'Immediate Actions',
+            route: '/immediate-actions',
+        },
+        {
+            key: 'follow-up-actions',
+            label: 'Follow-up Actions',
+            route: '/follow-up-actions',
+        },
+        { key: 'prepared-by', label: 'Prepared By', route: '/prepared-by' },
         { key: 'review', label: 'Review', route: '/review' },
     ];
 
     readonly currentIndex = computed(() => {
         const path = this.currentPath();
-        const idx = this.steps.findIndex(s => s.key === path);
+        const idx = this.steps.findIndex((s) => s.key === path);
         return idx >= 0 ? idx : 0;
     });
 
@@ -40,9 +54,11 @@ export class ReportShellComponent implements OnInit {
         this.state.init();
 
         this.router.events
-            .pipe(filter(e => e instanceof NavigationEnd))
+            .pipe(filter((e) => e instanceof NavigationEnd))
             .subscribe((e: NavigationEnd) => {
-                const path = e.urlAfterRedirects.replace(/^\//, '').split('/')[0];
+                const path = e.urlAfterRedirects
+                    .replace(/^\//, '')
+                    .split('/')[0];
                 this.currentPath.set(path);
             });
 
@@ -108,6 +124,10 @@ export class ReportShellComponent implements OnInit {
         return this.state.form.get('followUpActions') as FormArray;
     }
 
+    private preparedByGroup(): FormArray {
+        return this.state.form.get('preparedBy') as FormArray;
+    }
+
     private isIncidentValid(): boolean {
         const g = this.incidentGroup();
         return g && g.valid;
@@ -117,7 +137,12 @@ export class ReportShellComponent implements OnInit {
         const arr = this.peopleArray();
         if (!arr || arr.length < 1) return false;
         // array.valid already checks children, but we’ll be explicit:
-        return arr.valid && arr.controls.every(c => c.valid);
+        return arr.valid && arr.controls.every((c) => c.valid);
+    }
+
+    private isPreparedByValid(): boolean {
+        const g = this.preparedByGroup();
+        return g && g.valid;
     }
 
     private isImmediateActionsValid(): boolean {
@@ -128,7 +153,7 @@ export class ReportShellComponent implements OnInit {
     private isFollowUpValid(): boolean {
         const arr = this.followUpArray();
         if (!arr || arr.length < 1) return false;
-        return arr.valid && arr.controls.every(c => c.valid);
+        return arr.valid && arr.controls.every((c) => c.valid);
     }
 
     /** Step-by-step completion in order (cannot skip ahead). */
@@ -139,11 +164,34 @@ export class ReportShellComponent implements OnInit {
             case 'people':
                 return this.isIncidentValid() && this.isPeopleValid();
             case 'immediate-actions':
-                return this.isIncidentValid() && this.isPeopleValid() && this.isImmediateActionsValid();
+                return (
+                    this.isIncidentValid() &&
+                    this.isPeopleValid() &&
+                    this.isImmediateActionsValid()
+                );
             case 'follow-up-actions':
-                return this.isIncidentValid() && this.isPeopleValid() && this.isImmediateActionsValid() && this.isFollowUpValid();
+                return (
+                    this.isIncidentValid() &&
+                    this.isPeopleValid() &&
+                    this.isImmediateActionsValid() &&
+                    this.isFollowUpValid()
+                );
+            case 'prepared-by':
+                return (
+                    this.isIncidentValid() &&
+                    this.isPeopleValid() &&
+                    this.isImmediateActionsValid() &&
+                    this.isFollowUpValid() &&
+                    this.isPreparedByValid()
+                );
             case 'review':
-                return this.isIncidentValid() && this.isPeopleValid() && this.isImmediateActionsValid() && this.isFollowUpValid();
+                return (
+                    this.isIncidentValid() &&
+                    this.isPeopleValid() &&
+                    this.isImmediateActionsValid() &&
+                    this.isPreparedByValid() &&
+                    this.isFollowUpValid()
+                );
             default:
                 return false;
         }
@@ -164,12 +212,20 @@ export class ReportShellComponent implements OnInit {
         const key = this.steps[i]?.key;
 
         switch (key) {
-            case 'incident': return this.isIncidentValid();
-            case 'people': return this.isPeopleValid();
-            case 'immediate-actions': return this.isImmediateActionsValid();
-            case 'follow-up-actions': return this.isFollowUpValid();
-            case 'review': return false;
-            default: return false;
+            case 'incident':
+                return this.isIncidentValid();
+            case 'people':
+                return this.isPeopleValid();
+            case 'immediate-actions':
+                return this.isImmediateActionsValid();
+            case 'follow-up-actions':
+                return this.isFollowUpValid();
+            case 'prepared-by':
+                return this.isPreparedByValid();
+            case 'review':
+                return false;
+            default:
+                return false;
         }
     }
 }

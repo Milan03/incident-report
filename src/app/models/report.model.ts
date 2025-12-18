@@ -19,14 +19,20 @@ export interface FollowUpAction {
     targetDate: string; // yyyy-mm-dd
 }
 
+export interface PreparedBy {
+    name: string;
+    email: string;
+    preparedAt: string; // yyyy-mm-dd
+}
+
 export interface IncidentReportDraftV1 {
     schemaVersion: 1;
     draftId: string;
     updatedAtUtc: string;
 
     incident: {
-        date: string;      // yyyy-mm-dd
-        time: string;      // HH:mm
+        date: string; // yyyy-mm-dd
+        time: string; // HH:mm
         location: string;
         type: IncidentType;
         description: string;
@@ -40,8 +46,5 @@ export interface IncidentReportDraftV1 {
 
     followUpActions: FollowUpAction[];
 
-    preparedBy: {
-        name: string;
-        datePreparedUtc: string; // auto
-    };
+    preparedBy: PreparedBy;
 }

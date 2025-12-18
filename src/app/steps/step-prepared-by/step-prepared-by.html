@@ -1,0 +1,36 @@
+<h2>Prepared By</h2>
+
+<div class="hint">Add who prepared this report. Email is optional for now.</div>
+
+<form class="form" [formGroup]="g">
+    <div class="card">
+        <div class="row">
+            <label>
+                Name *
+                <input
+                    type="text"
+                    formControlName="name"
+                    placeholder="Your name"
+                />
+            </label>
+
+            <label>
+                Prepared at *
+                <input type="date" formControlName="preparedAt" />
+            </label>
+        </div>
+
+        <label>
+            Email (optional)
+            <input
+                type="email"
+                formControlName="email"
+                placeholder="name@example.com"
+            />
+        </label>
+
+        @if (g.invalid && (g.dirty || g.touched)) {
+        <div class="error">Name and Prepared at are required.</div>
+        }
+    </div>
+</form>

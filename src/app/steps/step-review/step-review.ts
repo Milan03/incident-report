@@ -50,4 +50,17 @@ export class StepReviewComponent {
         const s = (v ?? '').toString().trim();
         return s.length > 0 ? s : '—';
     }
+
+    async copySummary(): Promise<void> {
+        const i = this.incident();
+        const summary =
+            `Incident Report\n\n` +
+            `Date: ${this.asText(i.get('date')?.value)}\n` +
+            `Time: ${this.asText(i.get('time')?.value)}\n` +
+            `Location: ${this.asText(i.get('location')?.value)}\n` +
+            `Type: ${this.getIncidentTypeLabel(i.get('type')?.value)}\n\n` +
+            `Description:\n${this.asText(i.get('description')?.value)}\n`;
+
+        await navigator.clipboard.writeText(summary);
+    }
 }

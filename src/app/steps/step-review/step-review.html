@@ -107,9 +107,20 @@
         <div class="kv">
             <div class="k">Name</div>
             <div class="v">{{ asText(preparedBy().get('name')?.value) }}</div>
+
+            <div class="k">Email</div>
+            <div class="v">{{ asText(preparedBy().get('email')?.value) }}</div>
+
+            <div class="k">Prepared at</div>
+            <div class="v">
+                {{ asText(preparedBy().get('preparedAt')?.value) }}
+            </div>
         </div>
 
         <div class="actions">
+            <button type="button" class="btn" (click)="copySummary()">
+                Copy summary
+            </button>
             <button type="button" class="btn" disabled>
                 Export PDF (coming soon)
             </button>
