@@ -118,15 +118,29 @@
         </div>
 
         <div class="actions">
-            <button type="button" class="btn" (click)="copySummary()">
-                Copy summary
+            <button
+                type="button"
+                class="btn"
+                (click)="copySummary()"
+                [disabled]="isCopying"
+            >
+                @if (isCopying) { Copying… } @else { Copy full report }
             </button>
+
             <button type="button" class="btn" disabled>
                 Export PDF (coming soon)
             </button>
             <button type="button" class="btn" disabled>
                 Email (coming soon)
             </button>
+        </div>
+        <div
+            class="toast"
+            [class.visible]="toastVisible()"
+            [class.success]="toastKind() === 'success'"
+            [class.error]="toastKind() === 'error'"
+        >
+            {{ toastText() }}
         </div>
 
         <div class="muted small">
